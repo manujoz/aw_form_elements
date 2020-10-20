@@ -13,3 +13,4 @@ import "./aw-input-file.js";
 import "./aw-select.js";
 import "./aw-select-search.js";
 import "./aw-textarea.js";
+import "./aw-input-color.js";

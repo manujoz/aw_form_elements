@@ -34,25 +34,29 @@ class AwTextarea extends AwInputErrorMixin( AwInputCharCounterMixin ( AwFormVali
 					font-weight: var(--aw-input-label-font-weight,var(--aw-input-font-weight,normal));
 					font-style: var(--aw-input-label-font-style,var(--aw-input-font-style,normal));
 					bottom: calc(-8px - var(--aw-input-font-size, 16px));
-					transition: bottom .3s, font-size .3s, color .3s;
+					transition: bottom .3s, font-size .3s, color .3s, padding .3s;
 				}
 				#label[writted] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-writted,var(--aw-input-label-color,#888888));
 				}
 				#label[focused] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-focused,var(--aw-primary-color,#1C7CDD));
 				}
 				#label[error] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-error,var(--aw-error-color,#b13033));
 				}
 				#label[disabled] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-disabled,var(--aw-input-color-disabled,#BBBBBB));
 				}
@@ -234,7 +238,7 @@ class AwTextarea extends AwInputErrorMixin( AwInputCharCounterMixin ( AwFormVali
 			autocomplete: { type: String, value: "off" },
 			minlength: { type: Number },
 			maxlength: { type: Number },
-			value: { type: String },
+			value: { type: String, value: "" },
 			autocorrect: String,
 			readonly: {type: Boolean, value: false, observer: "_set_readonly"},
 			disabled: {type: Boolean, value: false, observer: "_set_disabled"},
@@ -323,33 +327,52 @@ class AwTextarea extends AwInputErrorMixin( AwInputCharCounterMixin ( AwFormVali
 	}
 
 	/**
-	 * @method	_init
+	 * @method error_hide
 	 * 
-	 * Inicializa el componente una vez se ha conectado.
+	 * Muestra u oculta un mensaje de error
 	 */
-	_init() {
-		// Ponemos el value si viene dado.
-		
-		/*
-		NOTE: Desactivado de mommento a la espera de su necesidad.
-		
-		if ( this.value ) {
-			let eventKeyUp = new Event( "keyup" );
+	error_hide()
+	{
+		this.inputElement.setAttribute( "errmsg", "" );
+	}
 
-			this.inputElement.value = this.value;
-			this.inputElement.dispatchEvent( eventKeyUp );
-			this.inputElement.blur();
-			this._keyup();
+	/**
+	 * @method error_show
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 * 
+	 * @param {string} message Mensaje de error que se va a mostrar
+	 */
+	error_show( message )
+	{
+		this.inputElement.setAttribute( "errmsg", message );
+	}
 
-			eventKeyUp = null;
-		}*/
+	/**
+	 * @method get_value
+	 * 
+	 * Obtiene el valor del input
+	 * 
+	 * @return {string}
+	 */
+	get_value()
+	{
+		return this.inputElement.value;
+	}
 
-		//  Ponemos el autofocus
-		
-		if( this.autofocus && !this.readonly && !this.disabled ) {
-			setTimeout(() => {
-				this.focus();
-			},100);
+	/**
+	 * @method	has_error
+	 * 
+	 * Devuelve si el campo tiene un error
+	 * 
+	 * @return {boolean}
+	 */
+	has_error()
+	{
+		if( this.inputElement.getAttribute( "errmsg" )) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -361,6 +384,35 @@ class AwTextarea extends AwInputErrorMixin( AwInputCharCounterMixin ( AwFormVali
 	focus() {
 		this.inputElement.focus();
 		this.inputElement.selectionStart = this.inputElement.selectionEnd = this.inputElement.value.length;
+	}
+
+	/**
+	 * @method	_init
+	 * 
+	 * Inicializa el componente una vez se ha conectado.
+	 */
+	_init() {
+		// Ponemos el value si viene dado.
+		
+		/*
+		NOTE: Desactivado de mommento a la espera de su necesidad.
+		
+		if ( this.value ) {
+			this._keyup();
+		}*/
+
+		// Si hay valor lo ponemos como escrito
+		if( this.value ) {
+			this.$.label.setAttribute( "writted", "" );
+		}
+
+		//  Ponemos el autofocus
+		
+		if( this.autofocus && !this.readonly && !this.disabled ) {
+			setTimeout(() => {
+				this.focus();
+			},100);
+		}
 	}
 
 	/**
@@ -443,10 +495,6 @@ class AwTextarea extends AwInputErrorMixin( AwInputCharCounterMixin ( AwFormVali
 		this.$.label.setAttribute( "focused", "" );
 		this.$.baseline.setAttribute( "focused", "" );
 		this.$.container.setAttribute( "focused", "" );
-
-		if( this.inputElement.value.length == 1 && this.inputElement.value == " " ) {
-			this.inputElement.value = "";
-		}
 
 		// Invocamos la función externa keyup
 

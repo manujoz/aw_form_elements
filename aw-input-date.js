@@ -6,6 +6,7 @@ import { AwExternsFunctionsMixin } 		from "../aw_extern_functions/aw-extern-func
 
 import "../aw_form_helpers/aw-input-error.js";
 import "../aw_calendar/aw-calendar-simple.js";
+import "../aw_polymer_3/iron-icons/iron-icons.js";
 
 class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFunctionsMixin( AwFormValidateMixin( PolymerElement )))) {
 	static get template() {
@@ -43,25 +44,29 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					font-weight: var(--aw-input-label-font-weight,var(--aw-input-font-weight,normal));
 					font-style: var(--aw-input-label-font-style,var(--aw-input-font-style,normal));
 					bottom: calc(-8px - var(--aw-input-font-size, 16px));
-					transition: bottom .3s, font-size .3s, color .3s;
+					transition: bottom .3s, font-size .3s, color .3s, padding .3s;
 				}
 				#label[writted] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-writted,var(--aw-input-label-color,#888888));
 				}
 				#label[focused] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-focused,var(--aw-primary-color,#1C7CDD));
 				}
 				#label[error] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-error,var(--aw-error-color,#b13033));
 				}
 				#label[disabled] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-disabled,var(--aw-input-color-disabled,#BBBBBB));
 				}
@@ -225,6 +230,20 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					fill: var(--aw-input-prefix-color-disabled,var(--aw-input-color-disabled, #BBBBBB));
 				}
 
+				/* #region del iron-icon */
+
+				#clear {
+					position: absolute;
+					top: calc(50% - 9px);
+					right: 3px;
+					fill: #a43b3b;
+					width: 18px;
+					height: 18px;
+					background-color: white;
+					cursor: pointer;
+					display: none;
+				}
+
 				/* #region Flexible de error y contador */
 
 				.flex_inf {
@@ -338,6 +357,7 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 			<div id="label" hidden="{{!label}}">{{label}}</div>
 			<div id="container" class="container">
 				<label><input readonly autocomplete="off" on-focusin="_focusin" on-focusout="_focusout"/></label>
+				<iron-icon id="clear" icon="clear" on-click="_clear"></iron-icon>
 				<div id="baseline"></div>
 			</div>
 			<aw-input-error errmsg="{{errmsg}}">{{errmsg}}</aw-input-error>
@@ -395,6 +415,15 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 			lang: { type: String, value: "es" },
 			nameCalendar: { type: String, value: "" },
 			titcalendar: { type: String, value: "Selecciona una fecha" },
+			time: { type: Boolean, value: false },
+			nomarktoday: { type: Boolean, value: false },
+			nomarkfest: { type: Boolean, value: false },
+			noselectpast: { type: Boolean, value: false },
+			noselectsat: { type: Boolean, value: false },
+			noselectsun: { type: Boolean, value: false },
+			noselectfest: { type: Boolean, value: false },
+			ccaa: { type: String, value: "" },
+			diasfest: { type: Array, value: "" },
 
 			// Atributos básicos del input
 
@@ -434,6 +463,14 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 			parentForm: { type: Object },
 			noregister: { type: Boolean, value: false }
 		};
+	}
+
+	constructor() {
+		super();
+
+		// Asignamos el nombre del calendario
+
+		this.nameCalendar = "aw-input-date:" + this.name + ( Math.floor(Math.random() * (100000 - 100)) );
 	}
 
 	/**
@@ -510,6 +547,65 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 	}
 
 	/**
+	 * @method error_hide
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 */
+	error_hide()
+	{
+		this.inputElement.setAttribute( "errmsg", "" );
+	}
+
+	/**
+	 * @method error_show
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 * 
+	 * @param {string} message Mensaje de error que se va a mostrar
+	 */
+	error_show( message )
+	{
+		this.inputElement.setAttribute( "errmsg", message );
+	}
+
+	/**
+	 * @method get_value
+	 * 
+	 * Obtiene el valor del input
+	 * 
+	 * @return {string}
+	 */
+	get_value()
+	{
+		return this.inputElement.value;
+	}
+
+	/**
+	 * @method	has_error
+	 * 
+	 * Devuelve si el campo tiene un error
+	 * 
+	 * @return {boolean}
+	 */
+	has_error()
+	{
+		if( this.inputElement.getAttribute( "errmsg" )) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @method	focus
+	 * 
+	 * Pone el foco sobre el input.
+	 */
+	focus() {
+		this.inputVisible.focus();
+	}
+
+	/**
 	 * @method	_init
 	 * 
 	 * Inicializa el componente una vez se ha conectado.
@@ -528,15 +624,6 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		if( this.value ) {
 			this._keyup();
 		}
-	}
-
-	/**
-	 * @method	focus
-	 * 
-	 * Pone el foco sobre el input.
-	 */
-	focus() {
-		this.inputVisible.focus();
 	}
 
 	/**
@@ -620,11 +707,33 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 			return false;
 		}
 
+		this.$.clear.style.display = "block";
+
 		this.inputElement.value = response.string;
 		this.inputVisible.value = response.format[ this.formatdate ];
 
-		this._close_calendar();
+		if( !this.value ) {
+			if( pastDate !== newDate ) {
+				this._close_calendar();
+			}
+			
+			this._change();
+		} else {
+			this.value = "";
+		}
+	}
+	
+	/**
+	 * @method	_clear
+	 * 
+	 * Limpia la fecha del input.
+	 */
+	_clear() {
+		this.inputElement.value = "";
+		this.inputVisible.value ="";
 
+		this.$.clear.style.display = "none";
+			
 		this._change();
 	}
 

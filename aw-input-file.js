@@ -35,25 +35,29 @@ class AwInputFile extends AwInputErrorMixin( AwFormValidateMixin( AwExternsFunct
 					font-weight: var(--aw-input-label-font-weight,var(--aw-input-font-weight,normal));
 					font-style: var(--aw-input-label-font-style,var(--aw-input-font-style,normal));
 					bottom: calc(-8px - var(--aw-input-font-size, 16px));
-					transition: bottom .3s, font-size .3s, color .3s;
+					transition: bottom .3s, font-size .3s, color .3s, padding .3s;
 				}
 				#label[writted] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-writted,var(--aw-input-label-color,#888888));
 				}
 				#label[focused] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-focused,var(--aw-primary-color,#1C7CDD));
 				}
 				#label[error] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-error,var(--aw-error-color,#b13033));
 				}
 				#label[disabled] {
 					bottom: -4px;
+					padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 					font-size: var(--aw-input-label-font-size-focused,12px);
 					color: var(--aw-input-label-color-disabled,var(--aw-input-color-disabled,#BBBBBB));
 				}
@@ -374,6 +378,75 @@ class AwInputFile extends AwInputErrorMixin( AwFormValidateMixin( AwExternsFunct
 	}
 
 	/**
+	 * @method error_hide
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 */
+	error_hide()
+	{
+		this.inputElement.setAttribute( "errmsg", "" );
+	}
+
+	/**
+	 * @method error_show
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 * 
+	 * @param {string} message Mensaje de error que se va a mostrar
+	 */
+	error_show( message )
+	{
+		this.inputElement.setAttribute( "errmsg", message );
+	}
+
+	/**
+	 * @method	get_files
+	 * 
+	 * Obtiene los archivos cargados en el input
+	 */
+	get_files()
+	{
+		return this.inputElement.files;
+	}
+
+	/**
+	 * @method get_value
+	 * 
+	 * Obtiene el valor del input
+	 * 
+	 * @return {string}
+	 */
+	get_value()
+	{
+		return this.inputElement.value;
+	}
+
+	/**
+	 * @method	has_error
+	 * 
+	 * Devuelve si el campo tiene un error
+	 * 
+	 * @return {boolean}
+	 */
+	has_error()
+	{
+		if( this.inputElement.getAttribute( "errmsg" )) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @method	focus
+	 * 
+	 * Pone el foco sobre el inputELement.
+	 */
+	focus() {
+		this.inputElement.focus();
+	}
+
+	/**
 	 * @method	_init
 	 * 
 	 * Inicializa el componente una vez se ha conectado.
@@ -411,15 +484,6 @@ class AwInputFile extends AwInputErrorMixin( AwFormValidateMixin( AwExternsFunct
 				this.inputVisible.style.paddingLeft = ( paddingLeft + contIcon.offsetWidth + 2 ) + "px";
 			}, 10);
 		}
-	}
-
-	/**
-	 * @method	focus
-	 * 
-	 * Pone el foco sobre el inputELement.
-	 */
-	focus() {
-		this.inputElement.focus();
 	}
 
 	/**
