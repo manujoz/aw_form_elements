@@ -15,6 +15,7 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 				position: relative;
 				padding: 0 0 10px 0;
 				margin: 0;
+				width: 180px;
 				font-family: var(--aw-input-font-family, "arial");
 				vertical-align: var(--aw-input-vertical-align, middle);
 				display: inline-block;
@@ -30,25 +31,29 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 				font-weight: var(--aw-input-label-font-weight,var(--aw-input-font-weight,normal));
 				font-style: var(--aw-input-label-font-style,var(--aw-input-font-style,normal));
 				bottom: calc(-8px - var(--aw-input-font-size, 16px));
-				transition: bottom .3s, font-size .3s, color .3s;
+				transition: bottom .3s, font-size .3s, color .3s, padding .3s;
 			}
 			#label[writted] {
 				bottom: -4px;
+				padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 				font-size: var(--aw-input-label-font-size-focused,12px);
 				color: var(--aw-input-label-color-writted,var(--aw-input-label-color,#888888));
 			}
 			#label[focused] {
 				bottom: -4px;
+				padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 				font-size: var(--aw-input-label-font-size-focused,12px);
 				color: var(--aw-input-label-color-focused,var(--aw-primary-color,#1C7CDD));
 			}
 			#label[error] {
 				bottom: -4px;
+				padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 				font-size: var(--aw-input-label-font-size-focused,12px);
 				color: var(--aw-input-label-color-error,var(--aw-error-color,#b13033));
 			}
 			#label[disabled] {
 				bottom: -4px;
+				padding-top: calc(var(--aw-input-font-size, 16px) - var(--aw-input-label-font-size-focused,12px));
 				font-size: var(--aw-input-label-font-size-focused,12px);
 				color: var(--aw-input-label-color-disabled,var(--aw-input-color-disabled,#BBBBBB));
 			}
@@ -64,7 +69,13 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 			.container {
 				position: relative;
 			}
-			.container input {
+			.container[focused] .input_visible {
+				background-color: var(--aw-input-background-color-focused,var(--aw-input-background-color,transparent));
+			}
+			.container[error] .input_visible {
+				background-color: var(--aw-input-background-color-error,var(--aw-input-background-color,transparent));
+			}
+			.container .input_visible {
 				width: 100%;
 				margin: 0;
 				color: var(--aw-input-color,#333333);
@@ -84,51 +95,25 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 				box-sizing: border-box;
 				transition: all .2s;
 			}
-			.container input:focus{
-				outline: 0;
-				background-color: var(--aw-input-background-color-focused,var(--aw-input-background-color,transparent));
+			.container .input_visible > img {
+				vertical-align: middle;
+				width: var(--aw-select-visible-image-width,var(--aw-select-options-image-width,20px));
+				margin-top: var(--aw-select-visible-image-margin-top,var(--aw-select-options-image-top,-4px));
+				margin-right: var(--aw-select-visible-image-margin-right,var(--aw-select-options-image-right,7px));
 			}
-			.container input[error]{
+			.container .input_visible > iron-icon {
+				width: var(--aw-select-visible-icon-width,var(--aw-select-options-icon-width,var(--aw-select-visible-image-width,var(--aw-select-options-image-width,18px))));
+				height: var(--aw-select-visible-icon-width,var(--aw-select-options-icon-width,var(--aw-select-visible-image-width,var(--aw-select-options-image-width,18px))));
+				fill: var(--aw-select-options-color,var(--aw-input-color, #333333));
+				margin-top: var(--select-visible-icon-margin-top,var(--aw-select-options-icon-top,-2px));
+				margin-right: var(--select-visible-icon-margin-right,var(--aw-select-options-icon-right,7px));
+			}
+			.container .input_visible[error]{
 				background-color: var(--aw-input-background-color-error,var(--aw-input-background-color,transparent));
 			}
-			.container input[disabled]{
+			.container .input_visible[disabled]{
 				color: var(--aw-input-color-disabled, #BBBBBB);
 				background-color: var(--aw-input-background-color-disabled,#F9F9F9);
-			}
-			.container input:-webkit-autofill {
-				-webkit-box-shadow: 0 0 0px 1000px white inset !important;
-				-webkit-text-fill-color: var(--aw-input-color, #111111);
-			}
-			.container input::-webkit-input-placeholder {
-				color: var(--aw-input-placeholder-color,#999999);
-				font-family: var(--aw-input-placeholder-font-family,var(--aw-input-font-family, "arial"));
-				font-style: var(--aw-input-placeholder-font-style,oblique);
-			}
-			.container input::-moz-placeholder {
-				color: var(--aw-input-placeholder-color,#999999);
-				font-family: var(--aw-input-placeholder-font-family,var(--aw-input-font-family, "arial"));
-				font-style: var(--aw-input-placeholder-font-style,oblique);
-			}
-			.container input::-ms-input-placeholder {
-				color: var(--aw-input-placeholder-color,#999999);
-				font-family: var(--aw-input-placeholder-font-family,var(--aw-input-font-family, "arial"));
-				font-style: var(--aw-input-placeholder-font-style,oblique);
-			}
-			.container input::-o-input-placeholder {
-				color: var(--aw-input-placeholder-color,#999999);
-				font-family: var(--aw-input-placeholder-font-family,var(--aw-input-font-family, "arial"));
-				font-style: var(--aw-input-placeholder-font-style,oblique);
-			}
-			.container input::-ms-reveal, input::-ms-clear {
-				display: none !important;
-			}
-			.container input[nospinners]::-webkit-outer-spin-button,
-			.container input[nospinners]::-webkit-inner-spin-button {
-				-webkit-appearance: none;
-				margin: 0;
-			}
-			.container input[nospinners] {
-				-moz-appearance:textfield;
 			}
 
 			/* #region Icono del select */
@@ -228,22 +213,61 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 				color: var(--aw-select-options-color-hover,var(--aw-input-color, #333333));
 				background-color: var(--aw-select-options-background-color-hover, #F0F0F0);
 			}
+			.option[preselected] > iron-icon {
+				fill: var(--aw-select-options-color-hover,var(--aw-input-color, #333333));
+			}
 			.option[selected] {
 				background-color: var(--aw-select-options-background-color-selected,var(--aw-primary-color,#1C7CDD));
 				color: var(--aw-select-options-color-selected,white);
+			}
+			.option[selected] > iron-icon {
+				fill: var(--aw-select-options-color-selected,white);
+			}
+
+			.option > img {
+				vertical-align: middle;
+				width: var(--aw-select-options-image-width,20px);
+				margin-top: var(--aw-select-options-image-top,-4px);
+				margin-right: var(--aw-select-options-image-right,7px);
+			}
+
+			.option > iron-icon {
+				width: var(--aw-select-options-image-width,20px);
+				height: var(--aw-select-options-image-width,20px);
+				fill: var(--aw-select-options-color,var(--aw-input-color, #333333));
+				margin-top: var(--aw-select-options-icon-top,-2px);
+				margin-right: var(--aw-select-options-icon-right,7px);
+			}
+
+			input.ghost {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 0px;
+				height: 0px;
+				opacity: 0;
 			}
 		</style>
 		<div class="cont_options">
 			<div id="options">
 				<template is="dom-repeat" items="{{options}}" as="option">
-					<div class="option" style$="{{option.style}}" value$="{{option.value}}" selected$="{{option.selected}}" title$="{{option.title}}" on-click="_select_option" on-mouseover="_hover">{{option.inner}}</div>
+					<template is="dom-if" if="{{option.noicon}}">
+						<div class="option" style$="{{option.style}}" value$="{{option.value}}" selected$="{{option.selected}}" title$="{{option.title}}" on-click="_select_option" on-mouseover="_hover">{{option.inner}}</div>
+					</template>
+					<template is="dom-if" if="{{option.image}}">
+						<div class="option" style$="{{option.style}}" value$="{{option.value}}" selected$="{{option.selected}}" title$="{{option.title}}" on-click="_select_option" on-mouseover="_hover"><img src="{{option.image}}">{{option.inner}}</div>
+					</template>
+					<template is="dom-if" if="{{option.iron}}">
+						<div class="option" style$="{{option.style}}" data-icon$="{{option.iron}}" value$="{{option.value}}" selected$="{{option.selected}}" title$="{{option.title}}" on-click="_select_option" on-mouseover="_hover"><iron-icon icon="{{option.iron}}"></iron-icon>{{option.inner}}</div>
+					</template>
 				</template>
 			</div>
 		</div>
 		<div id="label" hidden="{{!label}}">{{label}}</div>
 
 		<div id="container" class="container">
-			<label><input value$="{{value}}" disabled$="[[disabled]]" readonly on-focusin="_open_options" /></label>
+		<label><input class="ghost" readonly on-focusin="_open_options" /></label>
+			<div class="input_visible"disabled$="[[disabled]]">&ensp;</div>
 			<iron-icon icon="arrow-drop-down"></iron-icon>
 			<div class="cover" on-click="_open_options"></div>
 			<div id="baseline"></div>
@@ -338,7 +362,7 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		// Asignamos los inputs del componente
 
 		this.inputElement = this.shadowRoot.querySelector( ".hidden input" );
-		this.inputVisible = this.shadowRoot.querySelector( "#container input" );
+		this.inputVisible = this.shadowRoot.querySelector( ".input_visible" );
 
 		// Creamos las opciones
 
@@ -393,6 +417,70 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 	}
 
 	/**
+	 * @method error_hide
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 */
+	error_hide()
+	{
+		this.inputElement.setAttribute( "errmsg", "" );
+	}
+
+	/**
+	 * @method error_show
+	 * 
+	 * Muestra u oculta un mensaje de error
+	 * 
+	 * @param {string} message Mensaje de error que se va a mostrar
+	 */
+	error_show( message )
+	{
+		this.inputElement.setAttribute( "errmsg", message );
+	}
+
+	/**
+	 * @method get_value
+	 * 
+	 * Obtiene el valor del input
+	 * 
+	 * @return {string}
+	 */
+	get_value()
+	{
+		return this.inputElement.value;
+	}
+
+	/**
+	 * @method	has_error
+	 * 
+	 * Devuelve si el campo tiene un error
+	 * 
+	 * @return {boolean}
+	 */
+	has_error()
+	{
+		if( this.inputElement.getAttribute( "errmsg" )) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @method	reload
+	 * 
+	 * Refresca los options dentro del componente si cambiaron en el aw-select
+	 */
+	reload() {
+		this.selected = "";
+		this.inputElement.value = "";
+		this.inputVisible.value = "";
+		this.$.label.removeAttribute( "writted" );
+
+		this._create();
+	}
+
+	/**
 	 * @method	_create	
 	 * 
 	 * Crea las opciones del aw-select.
@@ -406,12 +494,19 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		for( let i = 0; i < opts.length; i++ ) {
 			let selected = false;
 			
-			if( !selected && (( !isNaN( this.selectedindex ) && parseInt(this.selectedindex) === i && !this.selectedvalue ) || ( this.selectedvalue && this.selectedvalue === opts[ i ].value ))) {
+			if( !selected && (( parseInt(this.selectedindex) === i && !this.selectedvalue ) || ( this.selectedvalue && this.selectedvalue === opts[ i ].value ))) {
 				selected = true;
 				this.selected = opts[ i ].value;
 				this.inputElement.value = opts[ i ].value;
-				this.inputVisible.value = opts[ i ].innerHTML;
 				this.$.label.setAttribute( "writted", "" );
+
+				if( opts[ i ].dataset.iron ) {
+					this.inputVisible.innerHTML = '<iron-icon icon="' + opts[ i ].dataset.iron + '"></iron-icon>' + opts[ i ].innerHTML;
+				} else if( opts[ i ].dataset.img ) {
+					this.inputVisible.innerHTML = '<img src="' + opts[ i ].dataset.img + '">' + opts[ i ].innerHTML;
+				} else {
+					this.inputVisible.innerHTML = opts[ i ].innerHTML;
+				}
 			}
 
 			var obj = {
@@ -420,6 +515,9 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 				inner: opts[ i ].innerHTML,
 				title: opts[ i ].getAttribute( "title" ),
 				selected: selected,
+				iron: opts[ i ].dataset.iron,
+				image: ( !opts[ i ].dataset.iron ) ? opts[ i ].dataset.img : "",
+				noicon: ( !opts[ i ].dataset.img && !opts[ i ].dataset.iron ) ? true : false,
 				style: ( this.colors ) ? "color: " + opts[ i ].value + " !important; background-color: " + opts[ i ].value + " !important;"  : ""
 			}
 
@@ -431,7 +529,6 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		// Cogemos las dimensiones de los options
 
 		setTimeout(() => {
-
 			var divOpts = this.$.options;
 			var clon = divOpts.cloneNode( true );
 			clon.style.display = "block";
@@ -613,6 +710,10 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 			var opt = el;
 		}
 
+		while( opt.tagName !== "DIV" ) {
+			opt = opt.parentElement;
+		}
+
 		// Asiganmos el value
 
 		var value = opt.getAttribute( "value" );
@@ -628,7 +729,18 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		// Rellenamos el valor
 
 		this.inputElement.value = opt.getAttribute( "value" );
-		this.inputVisible.value = opt.innerHTML;
+		this.shadowRoot.querySelector( "input.ghost" ).blur();
+
+		// Introducimos el input visible
+		let inner = opt.innerHTML;
+		if( opt.querySelector( "iron-icon" )) {
+			let clone = document.createElement( "DIV" );
+			clone.innerHTML = opt.innerHTML;
+
+			clone.querySelector( "iron-icon" ).parentElement.removeChild( clone.querySelector( "iron-icon" ) );
+			inner = '<iron-icon icon="' + opt.dataset.icon + '"></iron-icon>' + clone.innerHTML;
+		}
+		this.inputVisible.innerHTML = ( inner ) ? inner : "&ensp;";
 		
 		// Asignamos el color si corresponde
 
@@ -680,42 +792,72 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		// Cogemos los options y el seleccionado
 
 		var options = this.$.options.querySelectorAll( ".option" );
-		var selected = this.$.options.querySelector( ".option[preselected]" );
+		var selected = this.$.options.querySelector( ".option[selected]" );
+		var preselected = this.$.options.querySelector( ".option[preselected]" );
 
-		if( !selected ) {
-			this._close_options();
+		if( !preselected ) {
+			selected.setAttribute( "preselected", "" );
+			let first = ( ev.keyCode !== 38 && ev.keyCode !== 40 && ev.keyCode !== 13 ) ? ev.key.toLowerCase() : "";
+			this.writtedopen = first;
 			return false;
 		}
 
 		// Si pulamos arriba
-
 		if( ev.keyCode === 38 ) {
-			selected.removeAttribute( "preselected" );
+			preselected.removeAttribute( "preselected" );
 
-			if( selected.previousElementSibling ) {
-				selected.previousElementSibling.setAttribute( "preselected", "" );
+			let prev = preselected.previousElementSibling;
+			while( prev ) {
+				if( prev.tagName === "DIV" ) {
+					break;
+				}
+
+				prev = prev.previousElementSibling;
+			}
+
+			if( prev ) {
+				prev.setAttribute( "preselected", "" );
 			} else {
-				options[ options.length - 1 ].setAttribute( "preselected", "" );
+				for( let i = options.length - 1; i >= 0; i-- ) {
+					if( options[ i ].tagName === "DIV" ) {
+						options[ i ].setAttribute( "preselected", "" );
+						break;
+					}
+				}
 			}
 		} else
 
 		// Si pulsamos abajo
 
 		if( ev.keyCode === 40 ) {
-			selected.removeAttribute( "preselected" );
+			preselected.removeAttribute( "preselected" );
 
-			if( selected.nextElementSibling && selected.nextElementSibling.tagName === "DIV" ) {
-				selected.nextElementSibling.setAttribute( "preselected", "" );
+			let next = preselected.nextElementSibling;
+			while( next ) {
+				if( next.tagName === "DIV" ) {
+					break;
+				}
+
+				next = next.nextElementSibling;
+			}
+
+			if( next ) {
+				next.setAttribute( "preselected", "" );
 			} else {
-				options[ 0 ].setAttribute( "preselected", "" );
+				for( let i = 0; i < options.length; i++ ) {
+					if( options[ i ].tagName === "DIV" ) {
+						options[ i ].setAttribute( "preselected", "" );
+						break;
+					}
+				}
 			}
 		} else
 
 		// Si pulsamos intro
 
-		if( ev.keyCode === 13 ) {
-			selected.removeAttribute( "preselected" );
-			this._select_option( "", selected );
+		if( ev.keyCode === 13 || ev.keyCode === 9  ) {
+			preselected.removeAttribute( "preselected" );
+			this._select_option( "", preselected );
 			this._close_options();
 		} else { // Si pulsamos cualquier otra tecla
 
@@ -730,7 +872,7 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 			// Formamos la expresión regular
 
 			var elementFinder = null;
-			var palabra = new RegExp( "^" + this.writtedopen, "i");
+			var palabra = new RegExp( "(\<img\s+src\=\"[A-z0-9À-ÿ\\\%\s\/\.\:\-\_]+\"\>)?(\<iron\-icon\s+icon\=\"[A-z0-9À-ÿ\\\%\s\/\:\.\-\_]+\"\>\<\/iron\-icon\>)?" + this.writtedopen, "i");
 			var options = this.$.options.querySelectorAll( "div" );
 
 			// Buscamos la palabra en las options
@@ -922,20 +1064,6 @@ class AwSelect extends AwInputErrorMixin( AwFormValidateMixin ( AwExternsFunctio
 		}
 
 		window.scroll( 0, this.scrolltop );
-	}
-
-	/**
-	 * @method	reload
-	 * 
-	 * Refresca los options dentro del componente si cambiaron en el aw-select
-	 */
-	reload() {
-		this.selected = "";
-		this.inputElement.value = "";
-		this.inputVisible.value = "";
-		this.$.label.removeAttribute( "writted" );
-
-		this._create();
 	}
 
 	/**
