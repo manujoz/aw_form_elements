@@ -1,0 +1,29 @@
+{
+	"name": "aw_form_elements",
+	"version": "2.0.2",
+	"description": "Componentes de formulario estilo material",
+	"keywords": [
+		"Polymer",
+		"Web Components",
+		"Forms Polymer",
+		"Forms web components",
+		"Inputs web components"
+	],
+	"author": "Manu Overa",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/manujoz/aw_form_elements"
+	},
+	"dependencies": {
+		"aw_button": "^2.0.0",
+		"aw_calendar": "^2.0.0",
+		"aw_extern_functions": "^2.0.0",
+		"aw_form": "^2.0.0",
+		"aw_form_elements_common": "^2.0.0",
+		"aw_form_helpers": "^2.0.1",
+		"aw_form_mixins": "^2.0.0",
+		"aw_polymer_3": "^1.1.0"
+	},
+	"types": "./index.d.ts",
+	"license": "ISC"
+}
