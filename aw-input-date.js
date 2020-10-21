@@ -421,7 +421,7 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					<div class="calendar">
 						<aw-calendar-simple unresolved name="{{nameCalendar}}" lang="{{lang}}" nomarktoday nomarkfest></aw-calendar-simple>
 					</div>
-					<div class="ok">
+					<div class="ok" on-click="_close_calendar">
 						<iron-icon icon="check"></iron-icon>
 					</div>
 				</div>
