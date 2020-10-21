@@ -335,6 +335,29 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					animation: aw-input-date-df-show .3s forwards;
 				}
 
+				.cont_calendar .ok {
+					position: relative;
+					padding: 5px 0 5px;
+					text-align: center;
+					background-color: #EAEAEA;
+					cursor: pointer;
+					transition: background .3s;
+				}
+
+				.cont_calendar .ok:hover {
+					background-color: #73bb39;
+				}
+
+				.cont_calendar .ok iron-icon {
+					width: 24px;
+					height: 24px;
+					fill: #73bb39;
+					transition: fill .3s;
+				}
+				.cont_calendar .ok:hover iron-icon {
+					fill: white;
+				}
+
 				@keyframes aw-input-date-df-open {
 					from {
 						width: 0;
@@ -398,6 +421,9 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					<div class="calendar">
 						<aw-calendar-simple unresolved name="{{nameCalendar}}" lang="{{lang}}" nomarktoday nomarkfest></aw-calendar-simple>
 					</div>
+					<div class="ok">
+						<iron-icon icon="check"></iron-icon>
+					</div>
 				</div>
 			</div>
 		`;
@@ -412,6 +438,7 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 
 			// Atributos del calendario
 
+			openCal: {type: Boolean, value: false },
 			lang: { type: String, value: "es" },
 			nameCalendar: { type: String, value: "" },
 			titcalendar: { type: String, value: "Selecciona una fecha" },
@@ -675,8 +702,21 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 	 * Abre el calendario de selección de fecha.
 	 */
 	_open_calendar() {
+		if( this.openCal ) {
+			return;
+		}
+		this.openCal = true;
+
 		let fondo = this.shadowRoot.querySelector( ".fondo" );
 		let container = this.shadowRoot.querySelector( ".cont_calendar" );
+
+		let calendar = this.shadowRoot.querySelector( "aw-calendar-simple" );
+		let date = calendar.get_date();
+		
+		if( date ) {
+			this.inputElement.value = date.string;
+			this.inputVisible.value = date.format[ this.formatdate ];
+		}
 
 		Polymer.Fade.in( fondo, { speed: 200 } );
 		container.setAttribute( "open", "" );
@@ -688,6 +728,8 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 	 * Cierra el calendario de selección de fecha.
 	 */
 	_close_calendar() {
+		this.openCal = false;
+		
 		let fondo = this.shadowRoot.querySelector( ".fondo" );
 		let container = this.shadowRoot.querySelector( ".cont_calendar" );
 		
@@ -713,10 +755,6 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		this.inputVisible.value = response.format[ this.formatdate ];
 
 		if( !this.value ) {
-			if( pastDate !== newDate ) {
-				this._close_calendar();
-			}
-			
 			this._change();
 		} else {
 			this.value = "";
