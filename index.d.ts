@@ -50,6 +50,8 @@ declare var AwInput: {
 
 interface AwSelect extends HTMLElement {
 	inputElement: HTMLInputElement;
+	selectedindex: number;
+	selectedvalue: string;
 
 	/**
 	 * @method error_hide
@@ -143,6 +145,8 @@ declare var AwInputColor: {
 
 interface AwSelectSearch extends HTMLElement {
 	inputElement: HTMLInputElement;
+	selectedindex: number;
+	selectedvalue: string;
 
 	/**
 	 * @method error_hide
