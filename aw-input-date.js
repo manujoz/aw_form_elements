@@ -108,6 +108,7 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 					background-color: var(--aw-input-background-color-disabled,#F9F9F9);
 				}
 				.container input:-webkit-autofill {
+					box-shadow: 0 0 0px 1000px white inset !important;
 					-webkit-box-shadow: 0 0 0px 1000px white inset !important;
 					-webkit-text-fill-color: var(--aw-input-color, #111111);
 				}
@@ -485,6 +486,10 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 
 			listenFuncs: { type: Object },
 
+			// Atributos de control
+
+			valueInit: { type: String },
+
 			// Relación con el aw-form y el form
 
 			parentForm: { type: Object },
@@ -633,6 +638,25 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 	}
 
 	/**
+	 * @method	set_value
+	 * 
+	 * Asigna el valor al campo
+	 * 
+	 * @param {string} value Valor que queremos asignar al campo
+	 */
+	set_value( value )
+	{
+		if( !value.match( /^([0-9]{4}\-((1[0-2])|(0?[1-9]))\-((0?[1-9])|(1[0-9])|(2[0-9])|(3[0-1])))(\s((0?[0-9])|(1[0-9])|(2[0-3]))\:((0?[0-9])|([1-5][0-9])))?$/) ) {
+			console.error( "[aw-input-date.js#set_value]: You have not passed a correct date" );
+			return;
+		}
+
+		/** @type {AwCalendarSimple} */
+		let calendar = this.shadowRoot.querySelector( "aw-calendar-simple" );
+		calendar.set_date( value );
+	}
+
+	/**
 	 * @method	_init
 	 * 
 	 * Inicializa el componente una vez se ha conectado.
@@ -649,7 +673,14 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		// . . . . . . . . . . . . . . . . . . . . . 
 		
 		if( this.value ) {
-			this._keyup();
+			this.valueInit = this.value;
+		}
+
+		//  Ponemos el formato de fecha por defecto
+		// . . . . . . . . . . . . . . . . . . . . . 
+		
+		if( this.time && this.formatdate == "numeric" ) {
+			this.formatdate = "numericHour";
 		}
 	}
 
@@ -754,10 +785,10 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		this.inputElement.value = response.string;
 		this.inputVisible.value = response.format[ this.formatdate ];
 
-		if( !this.value ) {
+		if( !this.valueInit ) {
 			this._change();
 		} else {
-			this.value = "";
+			this.valueInit = "";
 		}
 	}
 	
