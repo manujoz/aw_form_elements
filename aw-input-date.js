@@ -501,8 +501,8 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		super();
 
 		// Asignamos el nombre del calendario
-
-		this.nameCalendar = "aw-input-date:" + this.name + ( Math.floor(Math.random() * (100000 - 100)) );
+		this.resolved = false;
+		this.nameCalendar = "aw-input-date:" + this.getAttribute( "name" ) + ( Math.floor(Math.random() * (100000 - 100)) );
 	}
 
 	/**
@@ -557,6 +557,18 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 		// Resolvemos
 
 		this.removeAttribute( "unresolved" );
+
+		setTimeout(() => {
+			this.resolved = true;
+
+			let calendar = this.shadowRoot.querySelector( "aw-calendar-simple" );
+			let date = calendar.get_date();
+			
+			if( date ) {
+				this.inputElement.value = date.string;
+				this.inputVisible.value = date.format[ this.formatdate ];
+			}
+		}, 700);
 	}
 
 	/**
@@ -775,6 +787,10 @@ class AwInputDate extends AwInputErrorMixin( AwInputPrefixMixin( AwExternsFuncti
 	 */
 	_select_date( ev ) {
 		let response = ev.detail.date;
+
+		if( !this.resolved ) {
+			return;
+		}
 
 		if( response.name !== this.nameCalendar ) {
 			return false;
