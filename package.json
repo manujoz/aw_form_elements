@@ -1,6 +1,6 @@
 {
 	"name": "aw_form_elements",
-	"version": "2.0.4",
+	"version": "2.0.5",
 	"description": "Componentes de formulario estilo material",
 	"keywords": [
 		"Polymer",
@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"aw_button": "^2.0.0",
-		"aw_calendar": "^2.0.0",
+		"aw_calendar": "^2.1.1",
 		"aw_extern_functions": "^2.0.0",
 		"aw_form": "^2.0.0",
 		"aw_form_elements_common": "^2.0.0",

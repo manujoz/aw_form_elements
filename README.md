@@ -344,6 +344,9 @@ let input = document.querySelector( "aw-input-date" );
 // Obtiene el valor del input
 let value = input.get_value();
 
+// Ingresa un valor al input
+input.set_value( "2030-12-05 23:45" );
+
 // Muestra un mensaje de error en el input
 input.error_show( "Error message" );
 
